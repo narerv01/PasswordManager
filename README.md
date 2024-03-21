@@ -12,13 +12,12 @@ Users can register for an account by providing their email address and creating 
 The system enforces password strength requirements and securely authenticates users during login using the hashed passwords. 
 ![LoginSignup](https://github.com/narerv01/PasswordManager/assets/143809276/0feed548-db57-40c3-a98c-9b50abe071b5)
 ![YouCanLogin](https://github.com/narerv01/PasswordManager/assets/143809276/f8f88eb0-adc7-4fc1-ad03-534972a47be4)
-
-![LoginSuccess](https://github.com/narerv01/PasswordManager/assets/143809276/42c61edf-c905-4c8c-bcbc-60e6bad0cfb2)
  
 **Password Storage and Encryption: **
 User passwords are securely hashed using the PBKDF2 algorithm with HMAC-SHA-512 for key derivation.
 The hashed passwords, along with unique randomly generated salts, are stored in a local SQL database. 
 Additionally, the system employs AES encryption with a unique initialization vector (IV) to encrypt URL passwords before storing them in the database.
+![LoginSuccess](https://github.com/narerv01/PasswordManager/assets/143809276/42c61edf-c905-4c8c-bcbc-60e6bad0cfb2)
 ![MyPasswords](https://github.com/narerv01/PasswordManager/assets/143809276/a58e237f-14d4-4f4d-9a07-b3df68add678)
 
 **Password Generation: **
