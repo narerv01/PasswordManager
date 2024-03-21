@@ -12,6 +12,7 @@ Users can register for an account by providing their email address and creating 
 The system enforces password strength requirements and securely authenticates users during login using the hashed passwords. 
 ![LoginSignup](https://github.com/narerv01/PasswordManager/assets/143809276/0feed548-db57-40c3-a98c-9b50abe071b5)
 ![YouCanLogin](https://github.com/narerv01/PasswordManager/assets/143809276/f8f88eb0-adc7-4fc1-ad03-534972a47be4)
+
 ![LoginSuccess](https://github.com/narerv01/PasswordManager/assets/143809276/42c61edf-c905-4c8c-bcbc-60e6bad0cfb2)
  
 **Password Storage and Encryption: **
