@@ -34,6 +34,7 @@ The generated passwords adhere to specified strength requirements, including len
 Authorized users can retrieve and decrypt stored passwords for their URLs. 
 The system utilizes the decryption key, derived from the user's hashed password and user's email, to decrypt the AES-encrypted passwords stored in the database. 
 This ensures that passwords are decrypted securely and accessed only by authorized users.
+
 ![DecryptedPass](https://github.com/narerv01/PasswordManager/assets/143809276/dd4217d8-eb9e-4ee6-af4c-f57fecdc15a8)
 ![AddNewUrlPass](https://github.com/narerv01/PasswordManager/assets/143809276/2f91e18e-169b-4c6b-8336-60e01f764563)
 
