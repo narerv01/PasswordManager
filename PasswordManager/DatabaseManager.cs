@@ -30,7 +30,7 @@ namespace PasswordManager
             }
         }
 
-        public void InsertPassword(int userId, string url, string username, byte[] password, byte[] salt)
+        public void InsertPassword(UserData userData, string url, byte[] encryptedPassword, byte[] iv)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -38,15 +38,16 @@ namespace PasswordManager
                 using (SqlCommand command = new SqlCommand("InsertPassword", connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.AddWithValue("@UserID", userId);
+                    command.Parameters.AddWithValue("@UserID", userData.UserID);
                     command.Parameters.AddWithValue("@URL", url);
-                    command.Parameters.AddWithValue("@Username", username);
-                    command.Parameters.AddWithValue("@Password", password);
-                    command.Parameters.AddWithValue("@Salt", salt);
+                    command.Parameters.AddWithValue("@EncryptedPassword", encryptedPassword);
+                    command.Parameters.AddWithValue("@IV", iv);
                     command.ExecuteNonQuery();
                 }
             }
         }
+
+
 
 
         public UserData GetUserByEmail(string email)
@@ -56,8 +57,9 @@ namespace PasswordManager
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                using (SqlCommand command = new SqlCommand("SELECT UserID, PasswordHash, Salt FROM Users WHERE Email = @Email", connection))
+                using (SqlCommand command = new SqlCommand("GetUserByEmail", connection))
                 {
+                    command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.AddWithValue("@Email", email);
 
                     using (SqlDataReader reader = command.ExecuteReader())
@@ -67,6 +69,7 @@ namespace PasswordManager
                             userData = new UserData
                             {
                                 UserID = reader.GetInt32(reader.GetOrdinal("UserID")),
+                                Email = reader.GetString(reader.GetOrdinal("Email")),
                                 PasswordHash = (byte[])reader["PasswordHash"],
                                 Salt = (byte[])reader["Salt"]
                             };
@@ -78,16 +81,50 @@ namespace PasswordManager
             return userData;
         }
 
-        // Other methods remain the same
-    }
+        public List<PasswordData> GetPasswordsForUser(int userId)
+        {
+            List<PasswordData> passwords = new List<PasswordData>();
 
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand("GetPasswordsForUser", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@UserID", userId);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            PasswordData passwordData = new PasswordData
+                            {
+                                URL = reader.GetString(0),
+                                EncryptedPassword = (byte[])reader["EncryptedPassword"],
+                                IV = (byte[])reader["IV"]
+                            };
+                            passwords.Add(passwordData);
+                        }
+                    }
+                }
+            }
+
+            return passwords;
+        }
+    }
     public class UserData
     {
         public int UserID { get; set; }
+        public string Email { get; set; }
         public byte[] PasswordHash { get; set; }
         public byte[] Salt { get; set; }
     }
 
-
-
 }
+
+
+
+
+
+
+ 
