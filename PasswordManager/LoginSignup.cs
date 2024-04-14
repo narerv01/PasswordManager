@@ -58,7 +58,7 @@ namespace PasswordManager
             {
                 MessageBox.Show("Login successful");
                 // Proceed to the main application or another form
-                loggedInForm = new LoggedIn(userData);
+                loggedInForm = new LoggedIn( userData, textBox2.Text);
                 loggedInForm.Show();
                 this.Hide(); // Hide the LoginSignup form
             }

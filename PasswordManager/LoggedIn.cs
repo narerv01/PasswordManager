@@ -15,8 +15,9 @@ namespace PasswordManager
         DatabaseManager db;
         PasswordHasher pw;
         private UserData userData;
+        string masterPassword;
 
-        public LoggedIn(UserData userData)
+        public LoggedIn(UserData userData, string masterPassword)
         {
             InitializeComponent();
 
@@ -24,13 +25,14 @@ namespace PasswordManager
             pw = new PasswordHasher();
 
             this.userData = userData;
+            this.masterPassword = masterPassword;
             label2.Text = "Logged in as: " + userData.Email;
         }
 
          
         private void button1_Click(object sender, EventArgs e)
         {
-            pw.GeneratePasswordForUrl(userData, textBox1.Text);
+            pw.GeneratePasswordForUrl(masterPassword, userData, textBox1.Text);
         }
 
         private void tabPage2_Click(object sender, EventArgs e)
@@ -85,7 +87,7 @@ namespace PasswordManager
             PasswordData storedPw = (PasswordData)((Button)sender).Tag;
 
             // Decrypt the password using PasswordHasher
-            string decryptedPassword = pw.DecryptPassword(storedPw.EncryptedPassword, userData.PasswordHash, storedPw.IV, userData.Email);
+            string decryptedPassword = pw.DecryptPassword(masterPassword, userData.PasswordHash, userData.Salt, storedPw.EncryptedPassword, storedPw.IV, userData.Email);
 
             // Show decrypted password in a MessageBox
             MessageBox.Show("Decrypted Password: " + decryptedPassword, "Password");

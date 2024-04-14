@@ -32,10 +32,10 @@ namespace PasswordManager
         }
          
         // Method to generate a password for a URL
-        public string GeneratePasswordForUrl(UserData userData, string url)
+        public string GeneratePasswordForUrl(string masterPassword, UserData userData, string url)
         {
             // Derive key from password hash and email
-            byte[] key = DeriveKey(userData.PasswordHash, userData.Email);
+            byte[] key = DeriveKey(masterPassword,userData.PasswordHash, userData.Salt, userData.Email);
 
             // Generate a random password
             string generatedPassword = GenerateRandomPassword();
@@ -52,9 +52,9 @@ namespace PasswordManager
 
 
         // Method to derive key from password hash and email
-        private byte[] DeriveKey(byte[] passwordHash, string email)
+        private byte[] DeriveKey(string masterPassword, byte[] passwordHash, byte[] salt, string email)
         {
-            using (var deriveBytes = new Rfc2898DeriveBytes(passwordHash, Encoding.UTF8.GetBytes(email), 10000))
+            using (var deriveBytes = new Rfc2898DeriveBytes(HashPassword(masterPassword + passwordHash, salt), Encoding.UTF8.GetBytes(email), 10000))
             {
                 return deriveBytes.GetBytes(32); // 256-bit key
             }
@@ -121,11 +121,11 @@ namespace PasswordManager
             return encryptedData;
         }
 
-        private string DecryptPasswordAES(byte[] encryptedPassword, byte[] key, byte[] iv, string email)
+        private string DecryptPasswordAES(string masterPassword, byte[] passwordHash, byte[] salt, byte[] encryptedPassword, byte[] iv, string email)
         {
             using (var aesAlg = Aes.Create())
             {
-                aesAlg.Key = DeriveKey(key, email);
+                aesAlg.Key = DeriveKey(masterPassword, passwordHash,salt, email);
                 aesAlg.IV = iv;
 
                 using (var decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV))
@@ -144,9 +144,9 @@ namespace PasswordManager
             }
         }
 
-        public string DecryptPassword(byte[] encryptedPassword, byte[] passwordHash, byte[] iv, string email)
+        public string DecryptPassword(string masterPassword, byte[] passwordHash, byte[] salt,  byte[] encryptedPassword, byte[] iv, string email)
         {
-            return DecryptPasswordAES(encryptedPassword, passwordHash, iv, email);
+            return DecryptPasswordAES(masterPassword, passwordHash, salt, encryptedPassword, iv, email);
         }
          
 
