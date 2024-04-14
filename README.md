@@ -21,6 +21,9 @@ When logging in the system finds the hashed masterpassword and salt via email fr
 The encryption uses the master password + the password hash and salt to make a new hash which will be the encryption key. In this way the key doesnt get stored in the database.
 
 
+
+
+
 **Title: Secure Password Manager System with PBKDF2 and AES**
 
 **Description:**
