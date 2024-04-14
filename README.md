@@ -1,3 +1,25 @@
+**Instructions to run the application**
+1. Run the application - you now have 2 choices, either login or signup as new user
+2. Signup: to signup, enter your email in the first textbox and password in the one below. There is some strength verification so this might take a few tries.
+3. Login: To login, enter your email and password
+4. Once logged in, the screen will changed to a loggedin screen with 2 tabs. One tab is for creating passwords for urls and the other for retrieving passwords for url's. TO generate a new password for a url, click Generate pass
+5. to View passwords of url's click the my passwords tab and click somehwere on the screen (to update the view) then click show button at a url to show password
+
+**Threat actors**
+This system protects against brute force attackts, by using a sha-512 with 10000 iterations mates it expensive to brute force. 
+It protects against password reuse, so the user doesnt reuse the same passwords everywhere and risks losing all accounts to a hacker if the hacker got his password.
+Password theft, even if the hacker gets access to the databse the hacker wont get the password as they are stored in hashed format.
+
+**Signup**
+When signing up a random salt is generated and used to hash the masterpassword.
+The hashed masterpassword is then stored in the database together with the salt and email
+
+**Login**
+When logging in the system finds the hashed masterpassword and salt via email from the database, then takes the raw password and hashes it using the salt, if the two hashed master passwords match then login is successful
+
+**Encryption for url passwords**
+The encryption uses the master password + the password hash and salt to make a new hash which will be the encryption key. In this way the key doesnt get stored in the database.
+
 
 **Title: Secure Password Manager System with PBKDF2 and AES**
 
